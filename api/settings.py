@@ -23,6 +23,17 @@ DEBUG = os.environ.get("DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 ALLOWED_HOSTS += [".onrender.com", "localhost", "127.0.0.1"]
 
+# CSRF Trusted Origins for Django 4.0+
+CSRF_TRUSTED_ORIGINS = [
+    "https://everyday-life-api-production.up.railway.app",
+    "https://*.onrender.com",
+]
+# Add origins from ALLOWED_HOSTS if they start with https/http or are domains
+for host in ALLOWED_HOSTS:
+    if host and host != "*" and not host.startswith("."):
+        CSRF_TRUSTED_ORIGINS.append(f"https://{host}")
+
+
 if not firebase_admin._apps:
     try:
         cred = credentials.Certificate(
@@ -31,6 +42,14 @@ if not firebase_admin._apps:
         firebase_admin.initialize_app(cred)
     except Exception as e:
         print(f"Firebase not initialized (Check file path): {e}")
+
+# Security Settings for Production
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 
 # Application definition
 INSTALLED_APPS = [
