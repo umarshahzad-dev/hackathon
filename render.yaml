@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: everyday-life-api
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn api.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "everyday-life-api.onrender.com"
+      - key: DATABASE_URL
+        value: "YOUR_NEON_DATABASE_URL_HERE"
+      - key: GEMINI_API_KEY
+        value: "YOUR_GEMINI_API_KEY_HERE"
+      - key: YOUTUBE_API_KEY
+        value: "YOUR_YOUTUBE_API_KEY_HERE"
+      - key: CLOUDINARY_CLOUD_NAME
+        value: "YOUR_CLOUDINARY_CLOUD_NAME_HERE"
+      - key: CLOUDINARY_API_KEY
+        value: "YOUR_CLOUDINARY_API_KEY_HERE"
+      - key: CLOUDINARY_API_SECRET
+        value: "YOUR_CLOUDINARY_API_SECRET_HERE"
+      - key: EMAIL_HOST_USER
+        value: "YOUR_EMAIL_HERE"
+      - key: EMAIL_HOST_PASSWORD
+        value: "YOUR_BREVO_SMTP_KEY_HERE"
